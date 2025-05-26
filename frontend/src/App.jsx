@@ -23,10 +23,25 @@ import DepartmentLogin from "./pages/department/Login";
 import DepartmentDashboard from "./pages/department/Dashboard";
 import AboutPage from "./pages/AboutPage";
 import ContactPage from "./pages/ContactPage";
+import Profile from "./pages/Profile";
+import AdminChatbot from "./components/admin/AdminChatbot";
 
 const PrivateRoute = ({ children }) => {
   const token = sessionStorage.getItem("token");
   return token ? children : <Navigate to="/login" />;
+};
+
+const AdminRoute = ({ children }) => {
+  const token = sessionStorage.getItem("token");
+  const user = JSON.parse(sessionStorage.getItem("user") || "{}");
+  return token && user.role === "admin" ? (
+    <>
+      {children}
+      <AdminChatbot />
+    </>
+  ) : (
+    <Navigate to="/login" />
+  );
 };
 
 const App = () => {
@@ -60,6 +75,14 @@ const App = () => {
             }
           />
           <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/submit-grievance"
             element={
               <PrivateRoute>
@@ -79,33 +102,33 @@ const App = () => {
           <Route
             path="/admin/dashboard"
             element={
-              <PrivateRoute>
+              <AdminRoute>
                 <AdminDashboard />
-              </PrivateRoute>
+              </AdminRoute>
             }
           />
           <Route
             path="/admin/grievances"
             element={
-              <PrivateRoute>
+              <AdminRoute>
                 <Grievances />
-              </PrivateRoute>
+              </AdminRoute>
             }
           />
           <Route
             path="/admin/users"
             element={
-              <PrivateRoute>
+              <AdminRoute>
                 <Users />
-              </PrivateRoute>
+              </AdminRoute>
             }
           />
           <Route
             path="/admin/stats"
             element={
-              <PrivateRoute>
+              <AdminRoute>
                 <Stats />
-              </PrivateRoute>
+              </AdminRoute>
             }
           />
           <Route path="/admin" element={<Navigate to="/admin/dashboard" />} />

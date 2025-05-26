@@ -61,15 +61,15 @@ const Users = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-100 min-h-screen pb-8">
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white/90 rounded-xl shadow-lg p-6 border border-blue-100">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <select
               name="role"
               value={filters.role}
               onChange={handleFilterChange}
-              className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="rounded-md border-blue-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-blue-50/40 text-blue-800 font-semibold"
             >
               <option value="">All Roles</option>
               <option value="student">Students</option>
@@ -82,15 +82,15 @@ const Users = () => {
               value={filters.search}
               onChange={handleFilterChange}
               placeholder="Search by name, email, or ID..."
-              className="rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+              className="rounded-md border-indigo-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 bg-indigo-50/40 text-indigo-800 font-semibold"
             />
           </div>
         </div>
 
         {/* Users List */}
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+        <div className="bg-white/90 rounded-xl shadow-lg overflow-hidden border border-purple-100">
+          <table className="min-w-full divide-y divide-purple-200">
+            <thead className="bg-purple-100/80">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Name
@@ -112,19 +112,19 @@ const Users = () => {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white/60 divide-y divide-purple-100">
               {users.map((user) => (
-                <tr key={user._id}>
+                <tr key={user._id} className="hover:bg-purple-50 transition-colors duration-150">
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm font-medium text-gray-900">
                       {user.name}
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{user.email}</div>
+                    <div className="text-sm text-gray-700">{user.email}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{user.studentId}</div>
+                    <div className="text-sm text-gray-700 font-mono">{user.studentId}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span
@@ -138,7 +138,7 @@ const Users = () => {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="text-sm text-gray-500">{user.course}</div>
+                    <div className="text-sm text-gray-700">{user.course}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {new Date(user.createdAt).toLocaleDateString()}

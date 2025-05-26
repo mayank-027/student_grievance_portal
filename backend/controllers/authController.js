@@ -135,4 +135,41 @@ exports.getMe = async (req, res) => {
       message: err.message,
     });
   }
+};
+
+// @desc    Update current logged in user's profile
+// @route   PUT /api/users/profile
+// @access  Private
+exports.updateProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { name, email, studentId, course, phone, profilePic } = req.body;
+
+    // Only update fields that are present in the request
+    const updateFields = {};
+    if (name) updateFields.name = name;
+    if (email) updateFields.email = email;
+    if (studentId) updateFields.studentId = studentId;
+    if (course) updateFields.course = course;
+    if (phone) updateFields.phoneNumber = phone;
+    if (profilePic) updateFields.profilePic = profilePic;
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { $set: updateFields },
+      { new: true, runValidators: true }
+    ).select('-password');
+
+    if (!updatedUser) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+
+    res.status(200).json({ success: true, user: updatedUser });
+  } catch (err) {
+    if (err.code === 11000) {
+      // Duplicate key error
+      return res.status(400).json({ success: false, message: 'Student ID or email already exists.' });
+    }
+    res.status(500).json({ success: false, message: err.message });
+  }
 }; 
