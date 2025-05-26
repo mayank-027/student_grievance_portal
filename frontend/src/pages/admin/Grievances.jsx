@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from '../../api';
 import DashboardLayout from '../../components/admin/DashboardLayout';
+import { CheckCircle, Clock, FileText, XCircle, Layers, Star } from 'lucide-react';
 
 const Grievances = () => {
   const [grievances, setGrievances] = useState([]);
@@ -121,6 +122,13 @@ const Grievances = () => {
     return colors[status] || 'bg-gray-100 text-gray-800';
   };
 
+  const statusIcons = {
+    Pending: <Clock className="h-5 w-5 text-yellow-500 mr-1" />,
+    'In Progress': <FileText className="h-5 w-5 text-blue-500 mr-1" />,
+    Resolved: <CheckCircle className="h-5 w-5 text-green-500 mr-1" />,
+    Rejected: <XCircle className="h-5 w-5 text-red-500 mr-1" />,
+  };
+
   if (loading) {
     return (
       <DashboardLayout>
@@ -133,9 +141,9 @@ const Grievances = () => {
 
   return (
     <DashboardLayout>
-      <div className="space-y-6">
+      <div className="space-y-6 bg-gradient-to-br from-indigo-50 via-purple-50 to-blue-100 min-h-screen pb-8">
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white/90 rounded-xl shadow-lg p-6 border border-indigo-100">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <select
               name="status"
@@ -178,28 +186,27 @@ const Grievances = () => {
         </div>
 
         {/* Grievances List */}
-        <div className="bg-white rounded-lg shadow">
+        <div className="bg-white/90 rounded-xl shadow-lg border border-purple-100">
           <div className="divide-y divide-gray-200">
             {grievances.map((grievance) => (
-              <div key={grievance._id} className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <h3 className="text-lg font-medium text-gray-900">
+              <div key={grievance._id} className="p-6 my-4 bg-gradient-to-r from-white via-purple-50 to-indigo-50 hover:bg-purple-100/60 transition-colors duration-200 rounded-2xl shadow border border-purple-50">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold text-purple-900 flex items-center gap-2">
+                      {statusIcons[grievance.status]}
                       {grievance.title}
                     </h3>
-                    <p className="mt-1 text-sm text-gray-500">
+                    <p className="mt-1 text-sm text-gray-600">
                       {grievance.description}
                     </p>
-                    <div className="mt-2 flex items-center space-x-4 text-sm text-gray-500">
-                      <span>Category: {grievance.category}</span>
-                      <span>Priority: {grievance.priority}</span>
-                      <span>
-                        Submitted by {grievance.submittedBy.name} on{' '}
-                        {new Date(grievance.createdAt).toLocaleDateString()}
-                      </span>
+                    <div className="mt-2 flex flex-wrap items-center gap-3 text-xs font-semibold">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded bg-indigo-100 text-indigo-700"><Layers className="h-4 w-4 mr-1" />{grievance.category}</span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded bg-yellow-100 text-yellow-700"><Star className="h-4 w-4 mr-1" />{grievance.priority}</span>
+                      <span className="inline-flex items-center px-2 py-0.5 rounded bg-gray-100 text-gray-700">Submitted by {grievance.submittedBy.name} on {new Date(grievance.createdAt).toLocaleDateString()}</span>
                     </div>
                   </div>
-                  <div className="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-2 md:space-y-0 w-full">
+                  <div className="flex flex-col md:flex-row md:items-center md:space-x-4 space-y-2 md:space-y-0 w-full md:w-auto mt-4 md:mt-0">
+                    <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold ${getStatusColor(grievance.status)}`}>{statusIcons[grievance.status]}{grievance.status}</span>
                     <select
                       value={grievance.status}
                       onChange={(e) => handleStatusUpdate(grievance._id, e.target.value)}
@@ -210,7 +217,6 @@ const Grievances = () => {
                       <option value="Resolved">Resolved</option>
                       <option value="Rejected">Rejected</option>
                     </select>
-
                     {/* Department assignment dropdown */}
                     <select
                       value={grievance.department?._id || ''}
@@ -239,7 +245,7 @@ const Grievances = () => {
                     />
                     <button
                       onClick={() => handleAddComment(grievance._id)}
-                      className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                      className="px-4 py-2 border border-transparent text-sm font-semibold rounded-md text-white bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 shadow"
                     >
                       Add Comment
                     </button>
@@ -248,7 +254,7 @@ const Grievances = () => {
                   {grievance.comments.length > 0 && (
                     <div className="mt-4 space-y-4">
                       {grievance.comments.map((comment, index) => (
-                        <div key={index} className="bg-gray-50 rounded-lg p-4">
+                        <div key={index} className="bg-indigo-50 rounded-lg p-4 border border-indigo-100">
                           <p className="text-sm text-gray-900">{comment.text}</p>
                           <p className="mt-1 text-xs text-gray-500">
                             By {comment.user.name} on{' '}

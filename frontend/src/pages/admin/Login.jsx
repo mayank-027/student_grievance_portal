@@ -23,6 +23,7 @@ const AdminLogin = () => {
       const response = await axios.post('/api/auth/login', formData);
       if (response.data.user.role === 'admin') {
         sessionStorage.setItem('token', response.data.token);
+        sessionStorage.setItem('user', JSON.stringify(response.data.user));
         navigate('/admin/dashboard');
       } else {
         setError('Access denied. Admin privileges required.');

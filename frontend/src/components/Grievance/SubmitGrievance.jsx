@@ -179,11 +179,15 @@ const SubmitGrievance = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-700 via-indigo-600 to-blue-400 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="w-full max-w-lg mx-auto">
-        <div className="bg-white shadow-2xl rounded-2xl p-8">
-          <h2 className="text-2xl font-bold text-purple-700 mb-2 text-center">Submit New Grievance</h2>
-          <p className="text-zinc-500 text-center mb-6">Fill out the form below to submit your grievance.</p>
+    <div className="min-h-screen relative flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Modern gradient background with pattern overlay */}
+      <div className="absolute inset-0 z-0 bg-gradient-to-br from-purple-400 via-indigo-300 to-blue-200 opacity-90" />
+      <div className="absolute inset-0 z-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
+
+      <div className="w-full max-w-lg mx-auto z-10">
+        <div className="bg-white/60 backdrop-blur-xl shadow-2xl rounded-2xl p-8 border border-white/40 ring-1 ring-white/30">
+          <h2 className="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-700 via-indigo-600 to-blue-600 mb-2 text-center drop-shadow">Submit New Grievance</h2>
+          <p className="text-indigo-500 text-center mb-6 font-medium">Fill out the form below to submit your grievance.</p>
 
           {error && (
             <div className="mb-4 flex items-center bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded relative" role="alert">
